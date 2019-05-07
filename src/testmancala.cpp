@@ -58,23 +58,23 @@ TEST(MancalaBoardTest, DefaultBoardTest){
 
 TEST(MancalaBoardTest, SetBoardTest){
     CMancalaBoard DefBoard;
-    CMancalaBoard SetBoard(1, 4, 0);
+    //CMancalaBoard SetBoard(1, 4, 0);
 
 }
 
 TEST(MancalaBoardTest, ResetBoardTest){
     CMancalaBoard ResBoard; //use move
 
-    EXPECT_EQ(ResBoard.ResetBoard().ToString(),
-                                            "P1          PITS\n"
-                                            "      5   4   3   2   1\n"
-                                            "/---------------------------\\\n"
-                                            "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
-                                            "| 0 |-------------------| 0 |\n"
-                                            "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
-                                            "\\---------------------------/\n"
-                                            "      1   2   3   4   5\n"
-                                            "             PITS          P2\n"); 
+    //EXPECT_EQ(ResBoard.ResetBoard().ToString(),
+                                            // "P1          PITS\n"
+                                            // "      5   4   3   2   1\n"
+                                            // "/---------------------------\\\n"
+                                            // "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
+                                            // "| 0 |-------------------| 0 |\n"
+                                            // "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
+                                            // "\\---------------------------/\n"
+                                            // "      1   2   3   4   5\n"
+                                            // "             PITS          P2\n"); 
 
 
     
