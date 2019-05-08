@@ -116,72 +116,73 @@ TEST(MancalaBoardTest, ResetBoardTest){
     CMancalaBoard ResBoard;
     ResBoard.ResetBoard();
 
-    // EXPECT_EQ(ResBoard.ToString(),
-    //                             "P1          PITS\n"
-    //                             "      5   4   3   2   1\n"
-    //                             "/---------------------------\\\n"
-    //                             "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
-    //                             "| 0 |-------------------| 0 |\n"
-    //                             "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
-    //                             "\\---------------------------/\n"
-    //                             "      1   2   3   4   5\n"
-    //                             "             PITS          P2\n");
+    EXPECT_EQ(ResBoard.ToString(),
+                                "P1          PITS\n"
+                                "      5   4   3   2   1\n"
+                                "/---------------------------\\\n"
+                                "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
+                                "| 0 |-------------------| 0 |\n"
+                                "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
+                                "\\---------------------------/\n"
+                                "      1   2   3   4   5\n"
+                                "             PITS          P2\n");
 
+    /////// NEW BOARD ///////
 
-    // int pits[MANCALA_PIT_SLOTS];
-    // int stores[MANCALA_PLAYERS];
-    // CMancalaBoard SetBoard(1, pits, stores);
-    // SetBoard.ResetBoard();
+    int pits[MANCALA_TOTAL_PITS] = {1,2,3,4,5,6,7,8,9,8};
+    int stores[MANCALA_PLAYERS] = {20, 20};
+    CMancalaBoard ResBoard2(1, pits, stores);
+    ResBoard2.ResetBoard();
 
-    // EXPECT_EQ(SetBoard.ToString(),
+    EXPECT_EQ(ResBoard2.ToString(),
 
-    //                             "P1          PITS\n"
-    //                             "      5   4   3   2   1\n"
-    //                             "/---------------------------\\\n"
-    //                             "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
-    //                             "| 0 |-------------------| 0 |\n"
-    //                             "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
-    //                             "\\---------------------------/\n"
-    //                             "      1   2   3   4   5\n"
-    //                             "             PITS          P2\n");
+                                "P1          PITS\n"
+                                "      5   4   3   2   1\n"
+                                "/---------------------------\\\n"
+                                "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
+                                "| 0 |-------------------| 0 |\n"
+                                "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
+                                "\\---------------------------/\n"
+                                "      1   2   3   4   5\n"
+                                "             PITS          P2\n");
 
-    // EXPECT_EQ(std::string(SetBoard),
-    //                             "P1          PITS\n"
-    //                             "      5   4   3   2   1\n"
-    //                             "/---------------------------\\\n"
-    //                             "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
-    //                             "| 0 |-------------------| 0 |\n"
-    //                             "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
-    //                             "\\---------------------------/\n"
-    //                             "      1   2   3   4   5\n"
-    //                             "             PITS          P2\n");
+    EXPECT_EQ(std::string(ResBoard2),
+                                "P1          PITS\n"
+                                "      5   4   3   2   1\n"
+                                "/---------------------------\\\n"
+                                "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
+                                "| 0 |-------------------| 0 |\n"
+                                "|   | 4 | 4 | 4 | 4 | 4 |   |\n"
+                                "\\---------------------------/\n"
+                                "      1   2   3   4   5\n"
+                                "             PITS          P2\n");
 }
 
-TEST(MancalaBoardTest, BasicMoveTest){
-    int pits[MANCALA_PIT_SLOTS];
-    int stores[MANCALA_PLAYERS];
-    CMancalaBoard BasicMoveBoard(1, pits, stores);
-    // we need to create the right moves to test what we want
+// TEST(MancalaBoardTest, BasicMoveTest){
+//     // int pits[MANCALA_PIT_SLOTS];
+//     // int stores[MANCALA_PLAYERS];
+//     // CMancalaBoard BasicMoveBoard(1, pits, stores);
+//     // // we need to create the right moves to test what we want
 
-}
+// }
 
-TEST(MancalaBoardTest, ScoringMoveTest){
-    // Needs to test that basic scoring, non double moves, non steals are correct    
-}
+// TEST(MancalaBoardTest, ScoringMoveTest){
+//     // Needs to test that basic scoring, non double moves, non steals are correct    
+// }
 
-TEST(MancalaBoardTest, DoubleMoveTest){
-    // Needs to test that double move is correct
-}
+// TEST(MancalaBoardTest, DoubleMoveTest){
+//     // Needs to test that double move is correct
+// }
 
-TEST(MancalaBoardTest, StealMoveTest){
-    // Needs to test that stealing move works correctly
-}
+// TEST(MancalaBoardTest, StealMoveTest){
+//     // Needs to test that stealing move works correctly
+// }
 
-TEST(MancalaBoardTest, CantMoveTest){
-    // Needs to test when player can't move correctly
-}
+// TEST(MancalaBoardTest, CantMoveTest){
+//     // Needs to test when player can't move correctly
+// }
 
-TEST(MancalaBoardTest, BadParametersTest){
-    // Needs to check that bad parameters are handled correctly
-}
+// TEST(MancalaBoardTest, BadParametersTest){
+//     // Needs to check that bad parameters are handled correctly
+// }
 
