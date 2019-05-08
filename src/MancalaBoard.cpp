@@ -1,29 +1,67 @@
 #include "MancalaBoard.h"
 #include <iostream>
 
+CMancalaBoard EmptyBoard;
+
+
 CMancalaBoard::CMancalaBoard(){
     DTurn = 0;
-    for(int Index = 0; Index < MANCALA_TOTAL_PITS; Index++){
+    for(int Index = 0; Index < MANCALA_TOTAL_PITS; Index++)
+    {
         DPits[Index] = 4;   
     }
-    for(int Index = 0; Index < MANCALA_PLAYERS; Index++){
+    for(int Index = 0; Index < MANCALA_PLAYERS; Index++)
+    {
         DStores[Index] = 0;
     }
 }
 
-CMancalaBoard::CMancalaBoard(int turn, const int pits[MANCALA_TOTAL_PITS], const int stores[MANCALA_PLAYERS]){
-    DTurn = turn;
-    for(int Index = 0; Index < MANCALA_TOTAL_PITS; Index++){
-        DPits[Index] = pits[Index];   
+CMancalaBoard::CMancalaBoard(int turn, const int pits[MANCALA_TOTAL_PITS], const int stores[MANCALA_PLAYERS])
+{
+    if (turn > 2 || turn < 1)
+    {
+        std::cout << "Invalid player: Turn goes to player 1" << std::endl;
+        DTurn = 0;
+    } else
+    {
+        DTurn = turn - 1;
     }
-    for(int Index = 0; Index < MANCALA_PLAYERS; Index++){
-        DStores[Index] = stores[Index];
+
+    for (int Index = 0; Index < MANCALA_TOTAL_PITS; Index++)
+    {
+        if (pits[Index] < 0)
+        { 
+            std::cout << "Invalid input: Default number of stones" << std::endl;
+            DPits[Index] = 4;
+        } else
+        {
+            DPits[Index] = pits[Index];
+        }
     }
-}
+
+    for (int Index = 0; Index < MANCALA_PLAYERS; Index++)
+    {
+        if (stores[Index] < 0)
+        {
+            std::cout << "Invalid input: Default number of stones" << std::endl;
+            DStores[Index] = 0;
+        } else
+        {
+            DStores[Index] = stores[Index];
+        }
+          
+    }
+}  
 
 void CMancalaBoard::ResetBoard(){
-    for(int Index = 0; Index < MANCALA_TOTAL_PITS; Index++){
-        DPits[Index] = 4;   
+    DTurn = 0;
+    for (int Index = 0; Index < MANCALA_TOTAL_PITS; Index++)
+    {
+        DPits[Index] = 4;
+    }
+    for (int Index = 0; Index < MANCALA_PLAYERS; Index++)
+    {
+        DStores[Index] = 0;
     }
 }
 
@@ -32,15 +70,28 @@ int CMancalaBoard::PlayerTurn() const{
 }
 
 int CMancalaBoard::PlayerScore(int player) const{
-    return DStores[player];
+    if (player > 2 || player < 1)
+    {
+        std::cout << "Incorrect input: player should be either 1 or 2" << std::endl;
+        return -1;
+    }
+    
+    return DStores[player - 1];
 }
 
 int CMancalaBoard::PitStoneCount(int player, int pit){
-    return DPits[player * MANCALA_PIT_SLOTS + pit]; 
+    if (player > 2 || player < 1 || pit > 5|| pit < 1)
+    {
+        std::cout << "Incorrect input" << std::endl;
+        return -1;
+    }
+    
+    return DPits[(player - 1) * MANCALA_PIT_SLOTS + (pit - 1)]; 
 }
 
-bool CMancalaBoard::GameOver() const{
-    for(int Index = 0; MANCALA_TOTAL_PITS; Index++){
+bool CMancalaBoard::GameOver() const
+{
+    for(int Index = 0; Index < MANCALA_TOTAL_PITS; Index++){
         if(DPits[Index]){
             return false;   
         }
@@ -147,7 +198,7 @@ bool CMancalaBoard::Move(int player, int pit){
     int Stones = DPits[PitIndex];
     int LastPitDrop = PitIndex;
     DPits[PitIndex] = 0;
-    //std::cout<<"@ line "<<__LINE__<<" "<<Stones<<std::endl;
+    // std::cout<<"@ line "<<__LINE__<<" "<<Stones<<std::endl;
     while(Stones > 1){
         PitIndex++;
         if((PitIndex % MANCALA_PIT_SLOTS) == 0){
