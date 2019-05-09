@@ -8,19 +8,19 @@ CMancalaBoard EmptyBoard;
 
 void print_game(int pits[MANCALA_TOTAL_PITS], int stores[MANCALA_PLAYERS])
 {
-    std::string pits;
-    std::string stores;
+    std::string pits_str;
+    std::string stores_str;
     for (int i = 0; i < MANCALA_TOTAL_PITS; i++)
     {
-        pits += " " + std::to_string(pits[i]) + " ";
+        pits_str += " " + std::to_string(pits[i]) + " ";
     }
     for (int j = 0; j < MANCALA_PLAYERS; j++)
     {
-        stores += " " + std::to_string(stores[j]) + " ";
+        stores_str += " " + std::to_string(stores[j]) + " ";
     }
 
-    std::cout << "PITS:  " << "[" << pits << "]" << std::endl;
-    std::cout << "STORES:  " << "[" << stores << "]" << std::endl;
+    std::cout << "PITS:  " << "[" << pits_str << "]" << std::endl;
+    std::cout << "STORES:  " << "[" << stores_str << "]" << std::endl;
 }
 
 void CMancalaBoard::print_ps()
