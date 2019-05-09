@@ -280,9 +280,6 @@ bool CMancalaBoard::Move(int player, int pit)
         // DPits[PitIndex] = 0;
         // return true: we need to change turns
     }
-    std::cout << "LINE: " << __LINE__ << std::endl;
-    print_game(DPits, DStores);
-
     else if(Stones == 1) 
     {
         if((PitIndex + 1% MANCALA_PIT_SLOTS) == 0)
