@@ -5,15 +5,15 @@ CMancalaBoard EmptyBoard;
 
 // helper functions -> delete later
 
-void print_game(int pits[MANCALA_PIT_SLOTS], stores[MANCALA_PLAYERS])
+void print_game(int pits[MANCALA_PIT_SLOTS], int stores[MANCALA_PLAYERS])
 {
-    for (auto &x: pits)
+    for (int i = 0; i < MANCALA_PIT_SLOTS; i++)
     {
-        pits += " " + std::to_string(x) + " ";
+        pits += " " + std::to_string(pits[i]) + " ";
     }
-    for (auto &y: pits)
+    for (int j = 0; j < MANCALA_PLAYERS; ij++)
     {
-        stores += " " + std::to_string(y) + " ";
+        stores += " " + std::to_string(stores[j]) + " ";
     }
 
     std::cout << "PITS:  " << "[" << pits << "]" << std::endl;
