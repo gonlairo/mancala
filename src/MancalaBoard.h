@@ -28,6 +28,9 @@ class CMancalaBoard{
         operator std::string() const;
         
         bool Move(int player, int pit);
+
+        // delete
+        void print_ps();
 };
 
 
