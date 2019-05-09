@@ -190,41 +190,57 @@ CMancalaBoard::operator std::string() const{
 }
 
 bool CMancalaBoard::Move(int player, int pit){
-    int PitIndex = player * MANCALA_PIT_SLOTS + pit;
+ 
+    int PitIndex = player * MANCALA_PIT_SLOTS + pit;    // pit we are in: number 1, ... ,10
     
-    if((PitIndex < 0) or (PitIndex > MANCALA_TOTAL_PITS)){
+    if((PitIndex < 0) or (PitIndex > MANCALA_TOTAL_PITS))   // pit out of bounds: return false
+    {
         return false;    
     }
+    
     int Stones = DPits[PitIndex];
     int LastPitDrop = PitIndex;
     DPits[PitIndex] = 0;
-    // std::cout<<"@ line "<<__LINE__<<" "<<Stones<<std::endl;
-    while(Stones > 1){
-        PitIndex++;
-        if((PitIndex % MANCALA_PIT_SLOTS) == 0){
-            if(player == (PitIndex / MANCALA_PIT_SLOTS) - 1){
-                DStores[player]++;
-                Stones--;
+
+    while(Stones > 1)
+    {
+        PitIndex++; // what if Pitindex is 9? we can't do this. Prob why weird numbers.
+
+        if ((PitIndex % MANCALA_PIT_SLOTS) == 0)    // Pit num 4 or 9 -> we need to put stone in Store
+        {    
+            if (player == (PitIndex / MANCALA_PIT_SLOTS) - 1) // player 0 or 1
+            {
+                DStores[player]++;  // we increment the number of stones in store of player 0 or 1.
+                Stones--;           // we reduce the num of stones by 1.
             }
         }
-        PitIndex %= MANCALA_TOTAL_PITS;
-        if(Stones){
+        
+        PitIndex %= MANCALA_TOTAL_PITS; // PitIndex = Pitindex % MANCALA_TOTAL_PITS
+
+        if(Stones)  // if stones num ≠ 0
+        {
             DPits[PitIndex]++;
             Stones--;
             LastPitDrop = PitIndex;
         }
     }
+
     PitIndex++;
-    PitIndex %= MANCALA_TOTAL_PITS;
-    if(DPits[PitIndex] == 0){
-        //std::cout<<"@ line "<<__LINE__<<std::endl;
+    PitIndex %= MANCALA_TOTAL_PITS; // PitIndex = Pitindex % MANCALA_TOTAL_PITS
+
+    if(DPits[PitIndex] == 0)
+    {
         int OppositeSide = MANCALA_TOTAL_PITS - 1  - PitIndex;
         DStores[player] += DPits[OppositeSide] + 1;
         DPits[OppositeSide] = 0;
     }
-    else if(Stones == 1){
-        if((PitIndex % MANCALA_PIT_SLOTS) == 0){
-            if(player == (PitIndex / MANCALA_PIT_SLOTS) - 1){
+
+    else if(Stones == 1) // why else if ansd not else
+    {
+        if((PitIndex % MANCALA_PIT_SLOTS) == 0)
+        {
+            if(player == (PitIndex / MANCALA_PIT_SLOTS) - 1)
+            {
                 DStores[player]++;
                 Stones--;
             }
@@ -236,8 +252,12 @@ bool CMancalaBoard::Move(int player, int pit){
             LastPitDrop = PitIndex;
         }
     }
-    if((LastPitDrop == MANCALA_PIT_SLOTS) or (PitIndex != MANCALA_PIT_SLOTS)){
+    
+    if((LastPitDrop == MANCALA_PIT_SLOTS) or (PitIndex != MANCALA_PIT_SLOTS))
+    {
         DTurn = 1 - DTurn;
     }
+
+
     return true;
 }

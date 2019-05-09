@@ -1,7 +1,10 @@
 
 # makefile #
 
-all: bin/mancala bin/testmancala
+all: bin/mancala runtest
+
+runtest: bin/testmancala
+	./bin/testmancala
 
 bin/mancala: obj/main.o obj/MancalaBoard.o
 	g++ -std=c++14 obj/main.o obj/MancalaBoard.o -o bin/mancala
