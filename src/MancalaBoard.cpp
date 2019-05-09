@@ -1,5 +1,6 @@
 #include "MancalaBoard.h"
 #include <iostream>
+#include <string>
 
 CMancalaBoard EmptyBoard;
 
