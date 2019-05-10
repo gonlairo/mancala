@@ -2,6 +2,6 @@
 
 .DS_Store
 *.vscode
-obj/*.o
-bin/*.o
+*.o
+
 

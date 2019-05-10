@@ -6,21 +6,29 @@ CMancalaBoard EmptyBoard;
 
 // helper functions -> delete later
 
-void print_game(int pits[MANCALA_TOTAL_PITS], int stores[MANCALA_PLAYERS])
+void print_game(int pits[MANCALA_TOTAL_PITS], int stores[MANCALA_PLAYERS], int stones)
 {
-    std::string pits_str;
+    std::string pits_str_player0;
+    std::string pits_str_player1;
     std::string stores_str;
-    for (int i = 0; i < MANCALA_TOTAL_PITS; i++)
+    for (int i = 0; i < MANCALA_TOTAL_PITS/2; i++)
     {
-        pits_str += " " + std::to_string(pits[i]) + " ";
+        pits_str_player0 += " " + std::to_string(pits[4 - i]) + " ";
+    }
+    for (int i = MANCALA_TOTAL_PITS/2; i < MANCALA_TOTAL_PITS ; i++)
+    {
+        pits_str_player1 += " " + std::to_string(pits[i]) + " ";
     }
     for (int j = 0; j < MANCALA_PLAYERS; j++)
     {
         stores_str += " " + std::to_string(stores[j]) + " ";
     }
-
-    std::cout << "PITS:  " << "[" << pits_str << "]" << std::endl;
-    std::cout << "STORES:  " << "[" << stores_str << "]" << std::endl;
+    std::cout << "                -----------------                 " <<std::endl;
+    std::cout << "number of stones:       " << stones << std::endl;
+    std::cout << "pits player 0:  " << "[" << pits_str_player0 << "]" << std::endl;
+    std::cout << "pits player 1:  " << "[" << pits_str_player1 << "]" << std::endl;
+    std::cout << "stores:         " << "    [" << stores_str << "]" << std::endl;
+    std::cout << "                -----------------                 " << std::endl;
 }
 
 void CMancalaBoard::print_ps()
@@ -242,83 +250,145 @@ bool CMancalaBoard::Move(int player, int pit)
 
     while(Stones > 1)   // why dont we do > 0?
     {
-    
-        
-        PitIndex++; // what if Pitindex is 9? we can't do this. Prob why weird numbers.
-        // if pitindex = 9; pitindex = 0
+        std::cout << "PitIndex: " << PitIndex << std::endl;
 
-        if ((PitIndex + 1 % MANCALA_PIT_SLOTS) == 0)    // Pit num 5 or 10 -> we need to put stone in Store
-        {    
-            if (player == (PitIndex + 1 / MANCALA_PIT_SLOTS) - 1) // player 0 or 1
-            {
-                DStores[player]++;  // we increment the number of stones in store of player 0 or 1.
-                Stones--;           // we reduce the num of stones by 1.
-            }
-            // possible else to switch to opposite side
-        }
-        
-        PitIndex %= MANCALA_TOTAL_PITS; // PitIndex = Pitindex % MANCALA_TOTAL_PITS; what does this do?
-
-        if(Stones)  // if stones num ≠ 0
+        // we need to check if we need to put a stone in the score
+        if ((PitIndex + 1 % MANCALA_PIT_SLOTS) == 0) // PitIndex == 4 || PitIndex == 9
         {
-            DPits[PitIndex]++;
-            Stones--;
-            LastPitDrop = PitIndex;
-        }
-    }
-    std::cout << "LINE: " << __LINE__ << std::endl; 
-    print_game(DPits, DStores);
-
-    PitIndex++; // why do we move again if we don't have any stones?
-    PitIndex = PitIndex + 1 % MANCALA_TOTAL_PITS; //why do we update PitIndex?
-
-    if(DPits[PitIndex] == 0)    // stealing
-    {
-        int OppositeSide = MANCALA_TOTAL_PITS - 1  - PitIndex;
-        DStores[player] += DPits[OppositeSide] + 1;
-        DPits[OppositeSide] = 0;
-        // DPits[PitIndex] = 0;
-        // return true: we need to change turns
-    }
-    else if(Stones == 1) 
-    {
-        if((PitIndex + 1% MANCALA_PIT_SLOTS) == 0)
-        {
-            if(player == (PitIndex + 1 / MANCALA_PIT_SLOTS) - 1)
+            std::cout << "LINE: " << __LINE__ << std::endl;
+            
+            if (PitIndex == 4 && player == 0)
             {
+                std::cout << "LINE: " << __LINE__ << std::endl;
                 DStores[player]++;
                 Stones--;
-                // return something
+                PitIndex++;
+                std::cout << "PitIndex: " << PitIndex << std::endl;
             }
+            else if (PitIndex == 9 && player == 1)
+            {
+                std::cout << "LINE: " << __LINE__ << std::endl;
+                DStores[player]++;
+                Stones--;
+                PitIndex = (PitIndex + 1) % MANCALA_TOTAL_PITS;
+                std::cout << "PitIndex: " << PitIndex << std::endl;
+            }
+            else
+            {
+                if (PitIndex == 4)
+                {
+                    PitIndex++;
+                }
+                if (PitIndex == 9)
+                {
+                    PitIndex = (PitIndex + 1) % MANCALA_TOTAL_PITS;
+                }        
+            }    
+        }
+        else
+        {
+            PitIndex++;
         }
 
-        PitIndex %= MANCALA_TOTAL_PITS;
-        if(Stones){
+        std::cout << "LINE: " << __LINE__ << std::endl;
+        std::cout << "PitIndex: " << PitIndex << std::endl;
+
+        if(Stones)  // if stones num ≠ 0. imagine pit with only 1 stone and is at 4th position.
+        {
+            print_game(DPits, DStores, Stones);
             DPits[PitIndex]++;
             Stones--;
             LastPitDrop = PitIndex;
+
+            std::cout << "LINE: " << __LINE__ << std::endl;
+        }
+
+    }
+
+
+    std::cout << "LINE: " << __LINE__ << std::endl;
+    std::cout << "PitIndex: " << PitIndex << std::endl;
+    print_game(DPits, DStores, Stones);
+
+
+    // WHAT DO WE DO WITH THE STONE LEFT?
+    //At this point we will only have only ONE STONE LEFT
+
+    if ((PitIndex + 1 % MANCALA_PIT_SLOTS) == 0) // PitIndex == 4 || PitIndex == 9
+    {
+        std::cout << "LINE: " << __LINE__ << std::endl;
+
+        if (PitIndex == 4 && player == 0)
+        {
+            std::cout << "LINE: " << __LINE__ << std::endl;
+            DStores[player]++;
+            Stones--;
+            return true;
+
+        }
+        else if (PitIndex == 9 && player == 1)
+        {
+            std::cout << "LINE: " << __LINE__ << std::endl;
+            DStores[player]++;
+            Stones--;
+            return true;
+        }
+        else
+        {
+            if (PitIndex == 4)
+            {
+                PitIndex++;
+            }
+            if (PitIndex == 9)
+            {
+                PitIndex = (PitIndex + 1) % MANCALA_TOTAL_PITS;
+            }
         }
     }
+    else
+    {
+        PitIndex++;
+        // we could another stone here if we didn't 
+        // have more rules... and we would be done
+    }
+
+    std::cout << "\nNO STONES IN STORE" << std::endl;
+    std::cout << "LINE: " << __LINE__ << std::endl;
+    std::cout << "PitIndex: " << PitIndex << "\n" << std::endl;
+
+    // OTHER RULES WITH THE STONE LEFT //
     
+    // STEALING: If we steal the stones of the oponent, we change turns -> return statement.
+    if(DPits[PitIndex] == 0)    
+    {
+        std::cout << "LINE: " << __LINE__ << std::endl;
+
+        int OppositeSide = MANCALA_TOTAL_PITS - 1  - PitIndex;
+        DStores[player] += DPits[OppositeSide] + 1; //stones + your stone left in your hand
+        Stones--;
+        DPits[OppositeSide] = 0;
+        DPits[PitIndex] = 0;
+
+        print_game(DPits, DStores, Stones);
+        return true;
+    }
+
+    // If nothing happens: we just add one stone to the pit.
+    if(Stones == 1) 
+    {
+        DPits[PitIndex]++;
+        Stones--;
+        LastPitDrop = PitIndex;
+        print_game(DPits, DStores, Stones);
+        return true;
+    }
+    
+    // I think this is related to turns.
     if((LastPitDrop == MANCALA_PIT_SLOTS) or (PitIndex != MANCALA_PIT_SLOTS))
     {
         DTurn = 1 - DTurn;
     }
 
-    std::cout << "LINE: " << __LINE__ << std::endl;
-    print_game(DPits, DStores);
-
-
     return true;
 }
 
-// int main()
-// {
-//     int pits[] = {0, 5, 5, 5, 5, 4, 4, 4, 4, 4};
-//     int stores[] = {0, 0};
-//     CMancalaBoard TargetBoard(1, pits, stores);
-//     CMancalaBoard Board;
-
-//     Board.Move(0, 0);
-//     return 0;
-// }
