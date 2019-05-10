@@ -74,16 +74,16 @@ TEST(MancalaBoardTest, SetBoardTest)
 
     // it doesnt pass. it seems correct.
     std::cout << SetBoard3.ToString() << std::endl;
-    // EXPECT_EQ(SetBoard3.ToString(),
-    //                                 "P1          PITS\n"
-    //                                 "      5   4   3   2   1\n"
-    //                                 "/---------------------------\\\n"
-    //                                 "|   | 2 | 7 | 4 | 5 | 2 |   |\n"
-    //                                 "| 2 |-------------------| 0 |\n"
-    //                                 "|   | 3 | 4 | 1 | 4 | 0 |   |\n"
-    //                                 "\\---------------------------/\n"
-    //                                 "      1   2   3   4   5\n"
-    //                                 "             PITS          P2\n");
+    EXPECT_EQ(SetBoard3.ToString(),
+                                    "P1          PITS\n"
+                                    "      5   4   3   2   1\n"
+                                    "/---------------------------\\\n"
+                                    "|   | 2 | 7 | 4 | 5 | 2 |   |\n"
+                                    "| 2 |-------------------| 0 |\n"
+                                    "|   | 3 | 4 | 1 | 4 | 0 |   |\n"
+                                    "\\---------------------------/\n"
+                                    "      1   2   3   4   5\n"
+                                    "             PITS          P2\n");
 }
 
 
@@ -147,16 +147,16 @@ TEST(MancalaBoardTest, BasicMoveTest)
     Board.Move(0,0);
     Board.print_ps();
     std::cout << std::string(Board) << std::endl;
-    // EXPECT_EQ(std::string(Board),
-    //                             "P1          PITS\n"
-    //                             "      5   4   3   2   1\n"
-    //                             "/---------------------------\\\n"
-    //                             "|   | 5 | 5 | 5 | 5 | 0 |   |\n"
-    //                             "| 0 |-------------------| 0 |\n"
-    //                             "|   | 0 | 5 | 5 | 5 | 5 |   |\n"
-    //                             "\\---------------------------/\n"
-    //                             "      1   2   3   4   5\n"
-    //                             "             PITS          P2\n");
+    EXPECT_EQ(std::string(Board),
+                                "P1          PITS\n"
+                                "      5   4   3   2   1\n"
+                                "/---------------------------\\\n"
+                                "|   | 5 | 5 | 5 | 5 | 0 |   |\n"
+                                "| 0 |-------------------| 0 |\n"
+                                "|   | 0 | 5 | 5 | 5 | 5 |   |\n"
+                                "\\---------------------------/\n"
+                                "      1   2   3   4   5\n"
+                                "             PITS          P2\n");
 
     EXPECT_TRUE(std::string(Board) == std::string(TargetBoard));
 
