@@ -144,7 +144,7 @@ TEST(MancalaBoardTest, BasicMoveTest)
     CMancalaBoard TargetBoard(1, pits, stores);
 
     std::cout << std::string(Board) << std::endl;
-    Board.Move(0,0);
+    Board.Move(1,0);
     Board.print_ps();
     std::cout << std::string(Board) << std::endl;
     EXPECT_EQ(std::string(Board),
@@ -169,7 +169,23 @@ TEST(MancalaBoardTest, BasicMoveTest)
 }
 
 TEST(MancalaBoardTest, ScoringMoveTest){
-    // Needs to test that basic scoring, non double moves, non steals are correct    
+    CMancalaBoard Board;
+    Board.Move(0,2);
+    
+    int pits[] = {4, 4, 0, 5, 5, 5, 4, 4, 4, 4};
+    int stores[] = {1, 0};
+    CMancalaBoard ScoreBoard(1, pits, stores);
+
+    EXPECT_EQ(Board.ToString(), ScoreBoard.ToString());
+    EXPECT_EQ(Board.PitStoneCount(0, 0), 4);
+    EXPECT_EQ(Board.PitStoneCount(0, 1), 4);
+    EXPECT_EQ(Board.PitStoneCount(0, 2), 0);
+    EXPECT_EQ(Board.PitStoneCount(1, 0), 5);
+    EXPECT_EQ(Board.PitStoneCount(1, 1), 5);
+
+
+    
+
 }
 
 TEST(MancalaBoardTest, DoubleMoveTest){
