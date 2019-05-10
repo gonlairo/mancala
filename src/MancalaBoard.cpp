@@ -114,13 +114,13 @@ int CMancalaBoard::PlayerTurn() const{
 }
 
 int CMancalaBoard::PlayerScore(int player) const{
-    if (player > 2 || player < 1)
+    if (player > 1 || player < 0)
     {
-        std::cout << "Incorrect input: player should be either 1 or 2" << std::endl;
+        std::cout << "Incorrect input: player should be either 0 or 1" << std::endl;
         return -1;
     }
     
-    return DStores[player - 1];
+    return DStores[player];
 }
 
 int CMancalaBoard::PitStoneCount(int player, int pit){
@@ -214,7 +214,7 @@ bool CMancalaBoard::Move(int player, int pit)
         std::cout << "PitIndex: " << PitIndex << std::endl;
 
         // we need to check if we need to put a stone in the score
-        if ((PitIndex + 1 % MANCALA_PIT_SLOTS) == 0) // PitIndex == 4 || PitIndex == 9
+        if (((PitIndex + 1) % MANCALA_PIT_SLOTS) == 0) // PitIndex == 4 || PitIndex == 9
         {
             std::cout << "LINE: " << __LINE__ << std::endl;
             
@@ -275,7 +275,7 @@ bool CMancalaBoard::Move(int player, int pit)
     // WHAT DO WE DO WITH THE STONE LEFT?
     //At this point we will only have only ONE STONE LEFT
 
-    if ((PitIndex + 1 % MANCALA_PIT_SLOTS) == 0) // PitIndex == 4 || PitIndex == 9
+    if (((PitIndex + 1) % MANCALA_PIT_SLOTS) == 0) // PitIndex == 4 || PitIndex == 9
     {
         std::cout << "LINE: " << __LINE__ << std::endl;
 
