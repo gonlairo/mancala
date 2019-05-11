@@ -62,13 +62,13 @@ CMancalaBoard::CMancalaBoard(){
 
 CMancalaBoard::CMancalaBoard(int turn, const int pits[MANCALA_TOTAL_PITS], const int stores[MANCALA_PLAYERS])
 {
-    if (turn > 2 || turn < 1)
+    if (turn > 1 || turn < 0)
     {
         std::cout << "Invalid player: Turn goes to player 1" << std::endl;
         DTurn = 0;
     } else
     {
-        DTurn = turn - 1;
+        DTurn = turn;
     }
 
     for (int Index = 0; Index < MANCALA_TOTAL_PITS; Index++)
@@ -206,6 +206,13 @@ bool CMancalaBoard::Move(int player, int pit)
     }
     
     int Stones = DPits[PitIndex];
+
+    if (Stones < 1)
+    {
+        DTurn = 1 - DTurn;
+        return true;
+    }
+
     int LastPitDrop = PitIndex;
     DPits[PitIndex] = 0;
 
@@ -260,8 +267,13 @@ bool CMancalaBoard::Move(int player, int pit)
             DPits[PitIndex]++;
             Stones--;
             LastPitDrop = PitIndex;
-
             std::cout << "LINE: " << __LINE__ << std::endl;
+
+            if (Stones == 0)
+            {
+                DTurn = 1 - DTurn;
+                return true;
+            }
         }
 
     }
@@ -273,21 +285,12 @@ bool CMancalaBoard::Move(int player, int pit)
 
 
     // WHAT DO WE DO WITH THE STONE LEFT?
-    //At this point we will only have only ONE STONE LEFT
 
     if (((PitIndex + 1) % MANCALA_PIT_SLOTS) == 0) // PitIndex == 4 || PitIndex == 9
     {
         std::cout << "LINE: " << __LINE__ << std::endl;
 
-        if (PitIndex == 4 && player == 0)
-        {
-            std::cout << "LINE: " << __LINE__ << std::endl;
-            DStores[player]++;
-            Stones--;
-            return true;
-
-        }
-        else if (PitIndex == 9 && player == 1)
+        if ((PitIndex == 4 && player == 0) or (PitIndex == 9 && player == 1))
         {
             std::cout << "LINE: " << __LINE__ << std::endl;
             DStores[player]++;
@@ -330,6 +333,9 @@ bool CMancalaBoard::Move(int player, int pit)
         DPits[OppositeSide] = 0;
         DPits[PitIndex] = 0;
 
+        // we change turn and we stop the game
+        DTurn = 1 - DTurn;
+
         print_game(DPits, DStores, Stones);
         return true;
     }
@@ -341,7 +347,6 @@ bool CMancalaBoard::Move(int player, int pit)
         Stones--;
         LastPitDrop = PitIndex;
         print_game(DPits, DStores, Stones);
-        return true;
     }
     
     // I think this is related to turns.
