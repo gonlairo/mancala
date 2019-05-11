@@ -139,11 +139,12 @@ TEST(MancalaBoardTest, BasicMoveTest)
 {
     CMancalaBoard Board;
 
-    int pits[] = {0, 5, 5, 5, 5, 4, 4, 4, 4, 4};
+    int pits[] = {0, 5, 5, 5, 5, 0, 5, 5, 5, 5};
     int stores[] = {0, 0};
     CMancalaBoard TargetBoard(1, pits, stores);
 
     std::cout << std::string(Board) << std::endl;
+    Board.Move(0,0);
     Board.Move(1,0);
     Board.print_ps();
     std::cout << std::string(Board) << std::endl;
@@ -181,7 +182,7 @@ TEST(MancalaBoardTest, ScoringMoveTest){
     EXPECT_EQ(Board.PitStoneCount(0, 1), 4);
     EXPECT_EQ(Board.PitStoneCount(0, 2), 0);
     EXPECT_EQ(Board.PitStoneCount(1, 0), 5);
-    EXPECT_EQ(Board.PitStoneCount(1, 1), 5);
+    EXPECT_EQ(Board.PitStoneCount(1, 1), 4);
 
 
     
