@@ -114,13 +114,13 @@ int CMancalaBoard::PlayerTurn() const{
 }
 
 int CMancalaBoard::PlayerScore(int player) const{
-    if (player > 2 || player < 1)
+    if (player > 1 || player < 0)
     {
-        std::cout << "Incorrect input: player should be either 1 or 2" << std::endl;
+        std::cout << "Incorrect input: player should be either 0 or 1" << std::endl;
         return -1;
     }
     
-    return DStores[player - 1];
+    return DStores[player];
 }
 
 int CMancalaBoard::PitStoneCount(int player, int pit){

@@ -184,13 +184,106 @@ TEST(MancalaBoardTest, ScoringMoveTest){
     EXPECT_EQ(Board.PitStoneCount(1, 0), 5);
     EXPECT_EQ(Board.PitStoneCount(1, 1), 4);
 
+    int pits2[] = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0};
+    int stores2[] = {19, 20};
+    CMancalaBoard ScoreBoard2(0, pits2, stores2);
+    ScoreBoard2.Move(0, 4); //last move of the game
 
-    
+    for (int player = 0; player < MANCALA_PLAYERS; player++)
+    {
+        for (int pit = 0; pit < MANCALA_PIT_SLOTS; pit++)
+        {
+            EXPECT_EQ(ScoreBoard2.PitStoneCount(player, pit), 0);
+        }
+    }
+
+    EXPECT_EQ(ScoreBoard2.PlayerScore(0), 20);
+    EXPECT_EQ(ScoreBoard2.PlayerScore(1), 20);
+    EXPECT_TRUE(ScoreBoard2.GameOver());
+    EXPECT_EQ(std::string(ScoreBoard2),
+                                    "P1          PITS\n"
+                                    "      5   4   3   2   1\n"
+                                    "/---------------------------\\\n"
+                                    "|   | 0 | 0 | 0 | 0 | 0 |   |\n"
+                                    "|20 |-------------------|20 |\n"
+                                    "|   | 0 | 0 | 0 | 0 | 0 |   |\n"
+                                    "\\---------------------------/\n"
+                                    "      1   2   3   4   5\n"
+                                    "             PITS          P2\n");
 
 }
 
 TEST(MancalaBoardTest, DoubleMoveTest){
-    // Needs to test that double move is correct
+    CMancalaBoard Board;
+    Board.move(0,1);
+    Board.move(0,0);
+
+    int pits[] = {0, 1, 6, 6, 6, 4, 4, 4, 4, 4};
+    int stores[] = {1, 0};
+    CMancalaBoard DMBoard(1, pits, stores);
+
+    EXPECT_EQ(Board.ToString(), DMBoard.ToString());
+    EXPECT_EQ(Board.PitStoneCount(0, 0), 0);
+    EXPECT_EQ(Board.PitStoneCount(0, 1), 1);
+    EXPECT_EQ(Board.PitStoneCount(0, 2), 6);
+    EXPECT_EQ(Board.PitStoneCount(0, 3), 6);
+    EXPECT_EQ(Board.PitStoneCount(0, 4), 6);
+    
+    EXPECT_EQ(Board.PlayerTurn(), 1);   
+    EXPECT_FALSE(Board.GameOver());  
+
+    int pits2[] = {0, 0, 0, 2, 1, 0, 0, 0, 2, 1};
+    int stores2[] = {15, 19};
+    CMancalaBoard DMBoard2(0, pits2, stores2);
+
+    DMBoard2.Move(0,3);
+    EXPECT_EQ(DMBoard2.PlayerTurn(), 0); 
+    EXPECT_EQ(DMBoard2.PlayerScore(0), 16);
+    EXPECT_EQ(DMBoard2.PitStoneCount(0, 3), 0);
+    EXPECT_EQ(Board.PitStoneCount(0, 4), 2);
+
+    DMBoard2.Move(0,4);
+    EXPECT_EQ(DMBoard2.PlayerTurn(), 1); 
+    EXPECT_EQ(DMBoard2.PlayerScore(0), 17);
+    EXPECT_EQ(DMBoard2.PitStoneCount(0, 4), 0);
+    EXPECT_EQ(Board.PitStoneCount(1, 0), 1);
+
+    EXPECT_FALSE(Board.GameOver()); 
+    EXPECT_EQ(std::string(DMBoard2),
+                                    "P1          PITS\n"
+                                    "      5   4   3   2   1\n"
+                                    "/---------------------------\\\n"
+                                    "|   | 0 | 0 | 0 | 0 | 0 |   |\n"
+                                    "|17 |-------------------|19 |\n"
+                                    "|   | 1 | 0 | 0 | 2 | 1 |   |\n"
+                                    "\\---------------------------/\n"
+                                    "      1   2   3   4   5\n"
+                                    "             PITS          P2\n"); 
+    DMBoard2.Move(1,3);
+    EXPECT_EQ(DMBoard2.PlayerTurn(), 1); 
+    EXPECT_EQ(DMBoard2.PlayerScore(1), 20);
+    EXPECT_EQ(DMBoard2.PitStoneCount(1, 3), 0);
+    EXPECT_EQ(Board.PitStoneCount(0, 4), 2);
+
+    DMBoard2.Move(1,4);
+    EXPECT_EQ(DMBoard2.PlayerTurn(), 0); 
+    EXPECT_EQ(DMBoard2.PlayerScore(1), 21);
+    EXPECT_EQ(DMBoard2.PitStoneCount(1, 4), 0);
+    EXPECT_EQ(Board.PitStoneCount(0, 0), 1);
+
+    EXPECT_FALSE(Board.GameOver()); 
+    EXPECT_EQ(std::string(DMBoard2),
+                                    "P1          PITS\n"
+                                    "      5   4   3   2   1\n"
+                                    "/---------------------------\\\n"
+                                    "|   | 0 | 0 | 0 | 0 | 1 |   |\n"
+                                    "|17 |-------------------|21 |\n"
+                                    "|   | 1 | 0 | 0 | 0 | 0 |   |\n"
+                                    "\\---------------------------/\n"
+                                    "      1   2   3   4   5\n"
+                                    "             PITS          P2\n"); 
+
+
 }
 
 TEST(MancalaBoardTest, StealMoveTest){
