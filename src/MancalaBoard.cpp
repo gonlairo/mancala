@@ -5,6 +5,7 @@
 CMancalaBoard EmptyBoard;
 
 // helper functions -> delete later
+void check_stones_pits(int player);
 
 void print_game(int pits[MANCALA_TOTAL_PITS], int stores[MANCALA_PLAYERS], int stones)
 {
@@ -195,11 +196,13 @@ CMancalaBoard::operator std::string() const{
     
 }
 
+
 bool CMancalaBoard::Move(int player, int pit)
 {
- 
     int PitIndex = player * MANCALA_PIT_SLOTS + pit;    // pit we are in: number 0, ... ,9
-    
+    int last_pit_p0 = 4;
+    int last_pit_p1 = 9;
+
     if((PitIndex < 0) or (PitIndex > MANCALA_TOTAL_PITS))   // pit out of bounds: return false
     {
         return false;    
@@ -216,43 +219,32 @@ bool CMancalaBoard::Move(int player, int pit)
     int LastPitDrop = PitIndex;
     DPits[PitIndex] = 0;
 
-    while(Stones > 1)   // why dont we do > 0?
+    while(Stones > 1) 
     {
         std::cout << "PitIndex: " << PitIndex << std::endl;
 
-        // we need to check if we need to put a stone in the score
         if (((PitIndex + 1) % MANCALA_PIT_SLOTS) == 0) // PitIndex == 4 || PitIndex == 9
         {
             std::cout << "LINE: " << __LINE__ << std::endl;
-            
-            if (PitIndex == 4 && player == 0)
+
+            if ((PitIndex == last_pit_p0 && player == 0) or (PitIndex == last_pit_p1 && player == 1))
             {
                 std::cout << "LINE: " << __LINE__ << std::endl;
                 DStores[player]++;
                 Stones--;
-                PitIndex++;
-                std::cout << "PitIndex: " << PitIndex << std::endl;
+                LastPitDrop = PitIndex;
             }
-            else if (PitIndex == 9 && player == 1)
+
+            if (PitIndex == 4)
             {
-                std::cout << "LINE: " << __LINE__ << std::endl;
-                DStores[player]++;
-                Stones--;
-                PitIndex = (PitIndex + 1) % MANCALA_TOTAL_PITS;
-                std::cout << "PitIndex: " << PitIndex << std::endl;
+                PitIndex++;
             }
             else
             {
-                if (PitIndex == 4)
-                {
-                    PitIndex++;
-                }
-                if (PitIndex == 9)
-                {
-                    PitIndex = (PitIndex + 1) % MANCALA_TOTAL_PITS;
-                }        
-            }    
+                PitIndex = (PitIndex + 1) % MANCALA_TOTAL_PITS;
+            }        
         }
+
         else
         {
             PitIndex++;
@@ -263,11 +255,9 @@ bool CMancalaBoard::Move(int player, int pit)
 
         if(Stones)  // if stones num ≠ 0. imagine pit with only 1 stone and is at 4th position.
         {
-            print_game(DPits, DStores, Stones);
             DPits[PitIndex]++;
             Stones--;
             LastPitDrop = PitIndex;
-            std::cout << "LINE: " << __LINE__ << std::endl;
 
             if (Stones == 0)
             {
@@ -275,7 +265,6 @@ bool CMancalaBoard::Move(int player, int pit)
                 return true;
             }
         }
-
     }
 
 
@@ -290,7 +279,7 @@ bool CMancalaBoard::Move(int player, int pit)
     {
         std::cout << "LINE: " << __LINE__ << std::endl;
 
-        if ((PitIndex == 4 && player == 0) or (PitIndex == 9 && player == 1))
+        if ((PitIndex == last_pit_p0 && player == 0) or (PitIndex == last_pit_p1 && player == 1))
         {
             std::cout << "LINE: " << __LINE__ << std::endl;
             DStores[player]++;
@@ -303,7 +292,7 @@ bool CMancalaBoard::Move(int player, int pit)
             {
                 PitIndex++;
             }
-            if (PitIndex == 9)
+            else
             {
                 PitIndex = (PitIndex + 1) % MANCALA_TOTAL_PITS;
             }
@@ -312,11 +301,8 @@ bool CMancalaBoard::Move(int player, int pit)
     else
     {
         PitIndex++;
-        // we could another stone here if we didn't 
-        // have more rules... and we would be done
     }
 
-    std::cout << "\nNO STONES IN STORE" << std::endl;
     std::cout << "LINE: " << __LINE__ << std::endl;
     std::cout << "PitIndex: " << PitIndex << "\n" << std::endl;
 
@@ -327,34 +313,83 @@ bool CMancalaBoard::Move(int player, int pit)
     {
         std::cout << "LINE: " << __LINE__ << std::endl;
 
-        int OppositeSide = MANCALA_TOTAL_PITS - 1  - PitIndex;
-        DStores[player] += DPits[OppositeSide] + 1; //stones + your stone left in your hand
-        Stones--;
-        DPits[OppositeSide] = 0;
-        DPits[PitIndex] = 0;
+        if ((player == 0 && PitIndex <= last_pit_p0) or (player == 1 && (PitIndex > last_pit_p0 && PitIndex <= last_pit_p1)))
+        {
+            std::cout << "LINE: " << __LINE__ << std::endl;
+            int OppositeSide = MANCALA_TOTAL_PITS - 1 - PitIndex;
+            DStores[player] += DPits[OppositeSide] + 1; //stones of opponent + player stone.
+            Stones--;
+            DPits[OppositeSide] = 0;
+            DPits[PitIndex] = 0;
 
-        // we change turn and we stop the game
-        DTurn = 1 - DTurn;
-
-        print_game(DPits, DStores, Stones);
-        return true;
-    }
-
-    // If nothing happens: we just add one stone to the pit.
-    if(Stones == 1) 
-    {
-        DPits[PitIndex]++;
-        Stones--;
-        LastPitDrop = PitIndex;
-        print_game(DPits, DStores, Stones);
-    }
+            // we change turn and we stop the game
+            DTurn = 1 - DTurn;
+            return true;
     
-    // I think this is related to turns.
-    if((LastPitDrop == MANCALA_PIT_SLOTS) or (PitIndex != MANCALA_PIT_SLOTS))
-    {
-        DTurn = 1 - DTurn;
     }
 
+    // NORMAL CASE: We just add one stone.
+
+    std::cout << "STBICH: " << Stones << " " << this->PitStoneCount(1, 1) << std::endl;
+
+    DPits[PitIndex]++;
+    Stones--;
+    LastPitDrop = PitIndex;
+    DTurn = 1 - DTurn;
     return true;
+
+    
+
+    // if(Stones == 1) 
+    // {
+    //     DPits[PitIndex]++;
+    //     Stones--;
+    //     LastPitDrop = PitIndex;
+    //     std::cout << "LINE: " << __LINE__ << std::endl;
+    //     print_game(DPits, DStores, Stones);
+    // }
+
+
+    // if we get to this point, we change turns
+    
+
+    // We change turns we get to this point.
+    // if((LastPitDrop == MANCALA_PIT_SLOTS) or (PitIndex != MANCALA_PIT_SLOTS))
+    // {
+    //     std::cout << "LINE: " << __LINE__ << std::endl;
+    //     DTurn = 1 - DTurn;
+    // }
+
+    
 }
 
+// if (player == 0)
+// {
+//     for (int i = 0; i < MANCALA_PIT_SLOTS; i++)
+//     {
+//         if (this->PitStoneCount(player, i) != 0)
+//         {
+//             break;
+//         }
+//         else
+//         {
+//             return true;
+//         }
+//     }
+//     DTurn = 1 - DTurn;
+// }
+// else
+// {
+//     for (int i = 0; i < MANCALA_PIT_SLOTS; i++)
+//     {
+//         if (this->PitStoneCount(player, i) != 0)
+//         {
+//             DTurn = 1 - DTurn;
+//             return true;
+//         }
+//         else
+//         {
+//             return true;
+//         }
+//     }
+// }

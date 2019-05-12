@@ -349,8 +349,8 @@ TEST(MancalaBoardTest, StealMoveTest){
     EXPECT_EQ(SBoard3.PlayerTurn(), 0);
     EXPECT_EQ(SBoard3.PlayerScore(1), 4);
     EXPECT_EQ(SBoard3.PitStoneCount(1, 4), 0);
-    EXPECT_EQ(SBoard3.PitStoneCount(0, 1), 5);
-    EXPECT_EQ(SBoard3.PitStoneCount(0, 2), 1);
+    EXPECT_EQ(SBoard3.PitStoneCount(0, 0), 5);
+    EXPECT_EQ(SBoard3.PitStoneCount(0, 1), 1);
 
     EXPECT_FALSE(SBoard3.GameOver());
 
@@ -365,9 +365,6 @@ TEST(MancalaBoardTest, StealMoveTest){
                                     "\\---------------------------/\n"
                                     "      1   2   3   4   5\n"
                                     "             PITS          P2\n");
-
-
-
 
 }
 
@@ -391,7 +388,7 @@ TEST(MancalaBoardTest, CantMoveTest){
     CantMoveBoard.Move(0,4);
     EXPECT_EQ(CantMoveBoard.PlayerScore(0), 19);
     EXPECT_EQ(CantMoveBoard.PitStoneCount(0, 4), 0);
-    EXPECT_EQ(CantMoveBoard.PlayerTurn(), 1);
+    EXPECT_EQ(CantMoveBoard.PlayerTurn(), 1);   // I dont know if it should be 1 or 0.
     EXPECT_FALSE(CantMoveBoard.GameOver()); 
     EXPECT_EQ(std::string(CantMoveBoard),
                                     "P1          PITS\n"
@@ -441,11 +438,9 @@ TEST(MancalaBoardTest, BadParametersTest)
     //invalid parameter for player score
     EXPECT_EQ(Board.PlayerScore(2), -1); 
     EXPECT_EQ(Board.PlayerScore(-3), -1); 
-    EXPECT_EQ(Board.PlayerScore("a"), -1); 
 
     EXPECT_EQ(Board.PitStoneCount(2, 1), -1);  //invalid parameter for player
-    EXPECT_EQ(Board.PitStoneCount(-2, 1), -1); //invalid parameter for player
-    EXPECT_EQ(Board.PitStoneCount("a", 4), -1);  //invalid parameter for player 
+    EXPECT_EQ(Board.PitStoneCount(-2, 1), -1); //invalid parameter for player 
 
     EXPECT_EQ(Board.PitStoneCount(1, 5), -1);  //invalid parameter for pit
     EXPECT_EQ(Board.PitStoneCount(1, -5), -1);  //invalid parameter for pit
