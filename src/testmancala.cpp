@@ -372,20 +372,85 @@ TEST(MancalaBoardTest, StealMoveTest){
 }
 
 TEST(MancalaBoardTest, CantMoveTest){
-    // Needs to test when player can't move correctly
+    
+    int pits[] = {0, 0, 0, 0, 1, 0, 2, 1, 2, 1};
+    int stores[] = {18, 15};
+
+    CMancalaBoard CantMoveBoard(0, pits, stores);
+
+    EXPECT_EQ(std::string(CantMoveBoard),
+                                    "P1          PITS\n"
+                                    "      5   4   3   2   1\n"
+                                    "/---------------------------\\\n"
+                                    "|   | 1 | 0 | 0 | 0 | 0 |   |\n"
+                                    "|18 |-------------------|15 |\n"
+                                    "|   | 0 | 2 | 1 | 2 | 1 |   |\n"
+                                    "\\---------------------------/\n"
+                                    "      1   2   3   4   5\n"
+                                    "             PITS          P2\n");
+    CantMoveBoard.Move(0,4);
+    EXPECT_EQ(CantMoveBoard.PlayerScore(0), 19);
+    EXPECT_EQ(Board.PitStoneCount(0, 4), 0);
+    EXPECT_EQ(CantMoveBoard.PlayerTurn(), 1);
+    EXPECT_FALSE(CantMoveBoard.GameOver()); 
+    EXPECT_EQ(std::string(CantMoveBoard),
+                                    "P1          PITS\n"
+                                    "      5   4   3   2   1\n"
+                                    "/---------------------------\\\n"
+                                    "|   | 0 | 0 | 0 | 0 | 0 |   |\n"
+                                    "|19 |-------------------|15 |\n"
+                                    "|   | 0 | 2 | 1 | 2 | 1 |   |\n"
+                                    "\\---------------------------/\n"
+                                    "      1   2   3   4   5\n"
+                                    "             PITS          P2\n");
+    CantMoveBoard.Move(1, 2);
+    EXPECT_EQ(CantMoveBoard.PlayerScore(1), 15);
+    EXPECT_EQ(Board.PitStoneCount(1, 2), 0);
+    EXPECT_EQ(CantMoveBoard.PlayerTurn(), 1);
+    EXPECT_EQ(std::string(CantMoveBoard),
+                                    "P1          PITS\n"
+                                    "      5   4   3   2   1\n"
+                                    "/---------------------------\\\n"
+                                    "|   | 0 | 0 | 0 | 0 | 0 |   |\n"
+                                    "|19 |-------------------|15 |\n"
+                                    "|   | 0 | 2 | 0 | 3 | 1 |   |\n"
+                                    "\\---------------------------/\n"
+                                    "      1   2   3   4   5\n"
+                                    "             PITS          P2\n");
+    CantMoveBoard.Move(1, 4);
+    EXPECT_EQ(CantMoveBoard.PlayerScore(1), 16);
+    EXPECT_EQ(Board.PitStoneCount(1, 4), 0);
+    EXPECT_EQ(CantMoveBoard.PlayerTurn(), 1);
+    EXPECT_EQ(std::string(CantMoveBoard),
+                                    "P1          PITS\n"
+                                    "      5   4   3   2   1\n"
+                                    "/---------------------------\\\n"
+                                    "|   | 0 | 0 | 0 | 0 | 0 |   |\n"
+                                    "|19 |-------------------|16 |\n"
+                                    "|   | 0 | 2 | 0 | 3 | 0 |   |\n"
+                                    "\\---------------------------/\n"
+                                    "      1   2   3   4   5\n"
+                                    "             PITS          P2\n");
+
 }
 
 TEST(MancalaBoardTest, BadParametersTest)
 {
-    // CMancalaBoard Board;
+    CMancalaBoard Board;
 
-    // EXPECT_EQ(Board.PlayerScore(0), 0);   //Player 1 begins with 0 stones in their store
-    // EXPECT_EQ(Board.PlayerScore(1), 0);   //Player 2 begins with 0 stones in their store
-    // EXPECT_EQ(Board.PlayerScore(3), -1);  //PlayerScore returns -1 on bad parameter
-    // EXPECT_EQ(Board.PlayerScore(-3), -1); //PlayerScore returns -1 on bad parameter
+    //invalid parameter for player score
+    EXPECT_EQ(Board.PlayerScore(2), -1); 
+    EXPECT_EQ(Board.PlayerScore(-3), -1); 
+    EXPECT_EQ(Board.PlayerScore("a"), -1); 
 
-    // EXPECT_EQ(Board.PitStoneCount(3, 1), -1);  //invalid parameter for player
-    // EXPECT_EQ(Board.PitStoneCount(-3, 1), -1); //invalid parameter for player
-    // EXPECT_EQ(Board.PitStoneCount(1, 6), -1);  //invalid parameter for pit
-    // EXPECT_EQ(Board.PitStoneCount(3, 6), -1);  //invalid parameter for player and pit
+    EXPECT_EQ(Board.PitStoneCount(2, 1), -1);  //invalid parameter for player
+    EXPECT_EQ(Board.PitStoneCount(-2, 1), -1); //invalid parameter for player
+    EXPECT_EQ(Board.PitStoneCount("a", 4), -1);  //invalid parameter for player 
+
+    EXPECT_EQ(Board.PitStoneCount(1, 5), -1);  //invalid parameter for pit
+    EXPECT_EQ(Board.PitStoneCount(1, -5), -1);  //invalid parameter for pit
+
+    EXPECT_EQ(Board.PitStoneCount(3, 6), -1);  //invalid parameter for player and pit
+    EXPECT_EQ(Board.PitStoneCount(67, -4), -1);  //invalid parameter for player and pit
+    
 }
