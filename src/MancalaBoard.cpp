@@ -202,6 +202,7 @@ bool CMancalaBoard::Move(int player, int pit)
     int PitIndex = player * MANCALA_PIT_SLOTS + pit;    // pit we are in: number 0, ... ,9
     int last_pit_p0 = 4;
     int last_pit_p1 = 9;
+    
 
     if((PitIndex < 0) or (PitIndex > MANCALA_TOTAL_PITS))   // pit out of bounds: return false
     {
@@ -212,7 +213,8 @@ bool CMancalaBoard::Move(int player, int pit)
 
     if (Stones < 1)
     {
-        DTurn = 1 - DTurn;
+        //DTurn = 1 - DTurn;
+        std::cout << "No stones: pick another pit" << std::endl;
         return true;
     }
 
@@ -235,7 +237,7 @@ bool CMancalaBoard::Move(int player, int pit)
                 LastPitDrop = PitIndex;
             }
 
-            if (PitIndex == 4)
+            if (PitIndex == last_pit_p0)
             {
                 PitIndex++;
             }
@@ -284,7 +286,31 @@ bool CMancalaBoard::Move(int player, int pit)
             std::cout << "LINE: " << __LINE__ << std::endl;
             DStores[player]++;
             Stones--;
-            return true;
+
+            if (player == 0)
+            {
+                for (int i = 0; i < MANCALA_PIT_SLOTS; i++)
+                {
+                    if (DPits[i])
+                    {
+                        return true;
+                    } 
+                }
+                DTurn = 1 - DTurn;
+                return true;
+            }
+            else
+            {
+                for (int i = MANCALA_PIT_SLOTS; i < MANCALA_TOTAL_PITS; i++)
+                {
+                    if (DPits[i])
+                    {
+                        return true;
+                    }
+                }
+                DTurn = 1 - DTurn;
+                return true;
+            }
         }
         else
         {
@@ -322,9 +348,32 @@ bool CMancalaBoard::Move(int player, int pit)
             DPits[OppositeSide] = 0;
             DPits[PitIndex] = 0;
 
-            // we change turn and we stop the game
-            DTurn = 1 - DTurn;
-            return true;
+            if (player == 0)
+            {
+                for (int i = MANCALA_PIT_SLOTS; i < MANCALA_TOTAL_PITS; i++)
+                {
+                    if (DPits[i])
+                    {
+                        DTurn = 1 - DTurn;
+                        return true;
+                    }
+                }
+
+                return true;
+            }
+            else
+            {
+                for (int i = 0; i < MANCALA_PIT_SLOTS; i++)
+                {
+                    if (DPits[i])
+                    {
+                        DTurn = 1 - DTurn;
+                        return true;
+                    }
+                }
+                return true;
+            }
+        }
     
     }
 
@@ -335,7 +384,31 @@ bool CMancalaBoard::Move(int player, int pit)
     DPits[PitIndex]++;
     Stones--;
     LastPitDrop = PitIndex;
-    DTurn = 1 - DTurn;
+    
+    if (player == 0)
+    {
+        for (int i = MANCALA_PIT_SLOTS; i < MANCALA_TOTAL_PITS; i++)
+        {
+            if (DPits[i])
+            {
+                DTurn = 1 - DTurn;
+                return true;
+            }
+        }
+        return true;
+    }
+    else
+    {
+        for (int i = 0; i < MANCALA_PIT_SLOTS; i++)
+        {
+            if (DPits[i])
+            {
+                DTurn = 1 - DTurn;
+                return true;
+            }
+        }
+        return true;
+    }
     return true;
 
     
