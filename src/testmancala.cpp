@@ -390,7 +390,7 @@ TEST(MancalaBoardTest, CantMoveTest){
                                     "             PITS          P2\n");
     CantMoveBoard.Move(0,4);
     EXPECT_EQ(CantMoveBoard.PlayerScore(0), 19);
-    EXPECT_EQ(Board.PitStoneCount(0, 4), 0);
+    EXPECT_EQ(CantMoveBoard.PitStoneCount(0, 4), 0);
     EXPECT_EQ(CantMoveBoard.PlayerTurn(), 1);
     EXPECT_FALSE(CantMoveBoard.GameOver()); 
     EXPECT_EQ(std::string(CantMoveBoard),
@@ -405,7 +405,7 @@ TEST(MancalaBoardTest, CantMoveTest){
                                     "             PITS          P2\n");
     CantMoveBoard.Move(1, 2);
     EXPECT_EQ(CantMoveBoard.PlayerScore(1), 15);
-    EXPECT_EQ(Board.PitStoneCount(1, 2), 0);
+    EXPECT_EQ(CantMoveBoard.PitStoneCount(1, 2), 0);
     EXPECT_EQ(CantMoveBoard.PlayerTurn(), 1);
     EXPECT_EQ(std::string(CantMoveBoard),
                                     "P1          PITS\n"
@@ -419,7 +419,7 @@ TEST(MancalaBoardTest, CantMoveTest){
                                     "             PITS          P2\n");
     CantMoveBoard.Move(1, 4);
     EXPECT_EQ(CantMoveBoard.PlayerScore(1), 16);
-    EXPECT_EQ(Board.PitStoneCount(1, 4), 0);
+    EXPECT_EQ(CantMoveBoard.PitStoneCount(1, 4), 0);
     EXPECT_EQ(CantMoveBoard.PlayerTurn(), 1);
     EXPECT_EQ(std::string(CantMoveBoard),
                                     "P1          PITS\n"
