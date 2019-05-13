@@ -3,5 +3,7 @@
 .DS_Store
 *.vscode
 *.o
+bin/mancala
+bin/testmancala
 
 
