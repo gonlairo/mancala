@@ -32,23 +32,6 @@ void print_game(int pits[MANCALA_TOTAL_PITS], int stores[MANCALA_PLAYERS], int s
     std::cout << "                -----------------                 " << std::endl;
 }
 
-void CMancalaBoard::print_ps()
-{
-    std::string pits;
-    std::string stores;
-    for (int Index = 0; Index < MANCALA_TOTAL_PITS; Index++)
-    {
-        pits += " " + std::to_string(DPits[Index]) + " ";
-    }
-    for (int Index = 0; Index < MANCALA_PLAYERS; Index++)
-    {
-        stores += " " + std::to_string(DStores[Index]) + " ";
-    }
-
-    std::cout << "PITS:  " << "[" << pits << "]" << std::endl;
-    std::cout << "STORES:  " << "[" << stores << "]" << std::endl;
-}
-
 CMancalaBoard::CMancalaBoard(){
     DTurn = 0;
     for(int Index = 0; Index < MANCALA_TOTAL_PITS; Index++)
