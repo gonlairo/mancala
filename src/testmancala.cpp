@@ -507,7 +507,8 @@ TEST(MancalaBoardTest, BadParametersTest)
     int stores[] = {10, 8};
 
     CMancalaBoard BadParameterBoard(0, pits, stores);
-    EXPECT_FALSE(BadParameterBoard.Move(0, 1), false); //picking a pit with no stones
-    EXPECT_EQ(BadParameterBoard.PlayerTurn(), 0);
+    EXPECT_FALSE(BadParameterBoard.Move(0, 1)); //picking a pit with no stones
+    EXPECT_TRUE(BadParameterBoard.Move(0, 2));
+    EXPECT_FALSE(BadParameterBoard.Move(0, 0); //trying to move player 0's stones when it is not their turn
     
 }
