@@ -3,7 +3,7 @@
 
 TEST(MancalaBoardTest, DefaultBoardTest)
 {
-    
+    /////// NEW BOARD ///////
     CMancalaBoard Board;
 
     EXPECT_EQ(std::string(Board), 
@@ -28,53 +28,83 @@ TEST(MancalaBoardTest, DefaultBoardTest)
         
     }  
 
-    EXPECT_EQ(Board.PlayerTurn(), 0);   //Player 1 goes first -> 0 == first player
-    EXPECT_FALSE(Board.GameOver());     //game should not be over
+    EXPECT_EQ(Board.PlayerTurn(), 0);   
+    EXPECT_FALSE(Board.GameOver());     
 
 }
 
 TEST(MancalaBoardTest, SetBoardTest)
 {
-    CMancalaBoard DefBoard; // empty board
-    int pits[MANCALA_TOTAL_PITS] = {4,4,4,4,4,4,4,4,4,4};
-    int stores[MANCALA_PLAYERS] = {0,0};     
-    CMancalaBoard SetBoard(0, pits, stores);    // equivalent to default board
+    /////// NEW BOARD ///////
 
-    EXPECT_EQ(SetBoard.ToString(), DefBoard.ToString());
-    EXPECT_TRUE(SetBoard.PlayerTurn() == DefBoard.PlayerTurn());
-    EXPECT_FALSE(SetBoard.GameOver());
+    int pits[] = {2, 1, 0, 4, 5, 5, 3, 1, 0, 9};
+    int stores[] = {8, 4};
+    CMancalaBoard SetBoard(1, pits, stores);
+
+    EXPECT_EQ(SetBoard.ToString(),
+                                "P1          PITS\n"
+                                "      5   4   3   2   1\n"
+                                "/---------------------------\\\n"
+                                "|   | 5 | 4 | 0 | 1 | 2 |   |\n"
+                                "| 8 |-------------------| 4 |\n"
+                                "|   | 5 | 3 | 1 | 0 | 9 |   |\n"
+                                "\\---------------------------/\n"
+                                "      1   2   3   4   5\n"
+                                "             PITS          P2\n");
+
+    EXPECT_EQ(Board.PitStoneCount(0, 0), 2);
+    EXPECT_EQ(Board.PitStoneCount(0, 1), 1);
+    EXPECT_EQ(Board.PitStoneCount(0, 2), 0);
+    EXPECT_EQ(Board.PitStoneCount(0, 3), 4);
+    EXPECT_EQ(Board.PitStoneCount(0, 4), 5);
+
+    EXPECT_EQ(Board.PitStoneCount(1, 0), 5);
+    EXPECT_EQ(Board.PitStoneCount(1, 1), 3);
+    EXPECT_EQ(Board.PitStoneCount(1, 2), 1);
+    EXPECT_EQ(Board.PitStoneCount(1, 3), 0);
+    EXPECT_EQ(Board.PitStoneCount(1, 4), 9);
 
     /////// NEW BOARD ///////
 
-    int pits2[MANCALA_TOTAL_PITS] = {0,0,0,0,0,0,0,0,0,0};
-    int stores2[MANCALA_PLAYERS] = {20, 20};
-    CMancalaBoard SetBoard2(1, pits2, stores2);
-    EXPECT_TRUE(SetBoard2.GameOver());
+    CMancalaBoard DefBoard; 
+    int pits2[MANCALA_TOTAL_PITS] = {4,4,4,4,4,4,4,4,4,4};
+    int stores2[MANCALA_PLAYERS] = {0,0};     
+    
+    CMancalaBoard SetBoard2(0, pits2, stores2);    // equivalent to default board
+
+    EXPECT_EQ(SetBoard2.ToString(), DefBoard.ToString());
+    EXPECT_TRUE(SetBoard2.PlayerTurn() == DefBoard.PlayerTurn());
+    EXPECT_FALSE(SetBoard2.GameOver());
+
+    /////// NEW BOARD ///////
+
+    int pits3[MANCALA_TOTAL_PITS] = {0,0,0,0,0,0,0,0,0,0};
+    int stores3[MANCALA_PLAYERS] = {20, 20};
+    CMancalaBoard SetBoard3(1, pits2, stores2);
+    EXPECT_TRUE(SetBoard3.GameOver());
 
     for (int player = 0; player < MANCALA_PLAYERS; player++)
     {
         for (int pit = 0; pit < MANCALA_PIT_SLOTS; pit++)
         {
-            EXPECT_EQ(SetBoard2.PitStoneCount(player, pit), 0);
+            EXPECT_EQ(SetBoard3.PitStoneCount(player, pit), 0);
         }
     }
 
-    SetBoard2.ResetBoard(); // reset board
-    EXPECT_EQ(SetBoard2.ToString(), DefBoard.ToString());
+    SetBoard3.ResetBoard(); // reset board
+    EXPECT_EQ(SetBoard3.ToString(), DefBoard.ToString());
 
     /////// NEW BOARD ///////
 
-    int pits3[MANCALA_TOTAL_PITS] = {2, 5, -1, 7, 2, 3, -2, 1, -3, 0};
-    int stores3[MANCALA_PLAYERS] = {2, -5};
-    CMancalaBoard SetBoard3(1, pits3, stores3);
+    int pits4[MANCALA_TOTAL_PITS] = {2, 5, -1, 7, 2, 3, -2, 1, -3, 0};
+    int stores4[MANCALA_PLAYERS] = {2, -5};
+    CMancalaBoard SetBoard4(1, pits3, stores3);
 
-    EXPECT_EQ(SetBoard3.PlayerTurn(), 1);   
-    EXPECT_FALSE(SetBoard3.PlayerTurn() == DefBoard.PlayerTurn());   // DefBoard = 0, SetBoard3 = 1 
-    EXPECT_FALSE(SetBoard3.GameOver());
+    EXPECT_EQ(SetBoard4.PlayerTurn(), 1);   
+    EXPECT_FALSE(SetBoard4.PlayerTurn() == DefBoard.PlayerTurn());   // DefBoard = 0, SetBoard3 = 1 
+    EXPECT_FALSE(SetBoard4.GameOver());
 
-    // it doesnt pass. it seems correct.
-    std::cout << SetBoard3.ToString() << std::endl;
-    EXPECT_EQ(SetBoard3.ToString(),
+    EXPECT_EQ(SetBoard4.ToString(),
                                     "P1          PITS\n"
                                     "      5   4   3   2   1\n"
                                     "/---------------------------\\\n"
@@ -90,6 +120,7 @@ TEST(MancalaBoardTest, SetBoardTest)
 
 TEST(MancalaBoardTest, ResetBoardTest)
 {
+    /////// NEW BOARD ///////
     CMancalaBoard ResBoard;
     ResBoard.ResetBoard();
 
@@ -106,8 +137,8 @@ TEST(MancalaBoardTest, ResetBoardTest)
 
     /////// NEW BOARD ///////
 
-    int pits[] = {1,2,3,4,5,6,7,8,9,8};
-    int stores[] = {20, 20};
+    int pits[] = {1,2,3,4,5,6,4,1,0,0};
+    int stores[] = {7, 7};
     CMancalaBoard ResBoard2(1, pits, stores);
     ResBoard2.ResetBoard();
 
@@ -137,17 +168,16 @@ TEST(MancalaBoardTest, ResetBoardTest)
 
 TEST(MancalaBoardTest, BasicMoveTest)
 {
+    /////// NEW BOARD ///////
     CMancalaBoard Board;
 
     int pits[] = {0, 5, 5, 5, 5, 0, 5, 5, 5, 5};
     int stores[] = {0, 0};
     CMancalaBoard TargetBoard(1, pits, stores);
-
-    std::cout << std::string(Board) << std::endl;
+   
     Board.Move(0,0);
     Board.Move(1,0);
-    Board.print_ps();
-    std::cout << std::string(Board) << std::endl;
+  
     EXPECT_EQ(std::string(Board),
                                 "P1          PITS\n"
                                 "      5   4   3   2   1\n"
@@ -160,16 +190,37 @@ TEST(MancalaBoardTest, BasicMoveTest)
                                 "             PITS          P2\n");
 
     EXPECT_TRUE(std::string(Board) == std::string(TargetBoard));
-
     EXPECT_EQ(Board.PitStoneCount(0, 0), 0);
     EXPECT_EQ(Board.PitStoneCount(0, 1), 5);
     EXPECT_EQ(Board.PitStoneCount(0, 2), 5);
     EXPECT_EQ(Board.PitStoneCount(0, 3), 5);
     EXPECT_EQ(Board.PitStoneCount(0, 4), 5);
 
+    /////// NEW BOARD ///////
+    int pits2[] = {4, 3, 2, 0, 9, 3, 2, 1, 1, 2};
+    int stores2[] = {9, 6};
+    CMancalaBoard TargetBoard2(1, pits2, stores2);
+
+    Board.Move(0,2);
+    Board.Move(1,3);
+
+    EXPECT_EQ(std::string(TargetBoard2),
+                                "P1          PITS\n"
+                                "      5   4   3   2   1\n"
+                                "/---------------------------\\\n"
+                                "|   | 10| 1 | 0 | 3 | 4 |   |\n"
+                                "| 9 |-------------------| 6 |\n"
+                                "|   | 3 | 2 | 1 | 0 | 3 |   |\n"
+                                "\\---------------------------/\n"
+                                "      1   2   3   4   5\n"
+                                "             PITS          P2\n");
+
+
 }
 
 TEST(MancalaBoardTest, ScoringMoveTest){
+    
+    /////// NEW BOARD ///////
     CMancalaBoard Board;
     Board.Move(0,2);
     
@@ -184,6 +235,7 @@ TEST(MancalaBoardTest, ScoringMoveTest){
     EXPECT_EQ(Board.PitStoneCount(1, 0), 5);
     EXPECT_EQ(Board.PitStoneCount(1, 1), 4);
 
+    /////// NEW BOARD ///////
     int pits2[] = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0};
     int stores2[] = {19, 20};
     CMancalaBoard ScoreBoard2(0, pits2, stores2);
@@ -214,6 +266,8 @@ TEST(MancalaBoardTest, ScoringMoveTest){
 }
 
 TEST(MancalaBoardTest, DoubleMoveTest){
+    
+    /////// NEW BOARD ///////
     CMancalaBoard Board;
     Board.Move(0,1);
     Board.Move(0,0);
@@ -232,6 +286,7 @@ TEST(MancalaBoardTest, DoubleMoveTest){
     EXPECT_EQ(Board.PlayerTurn(), 1);   
     EXPECT_FALSE(Board.GameOver());  
 
+    /////// NEW BOARD ///////
     int pits2[] = {0, 0, 0, 2, 1, 0, 0, 0, 2, 1};
     int stores2[] = {15, 19};
     CMancalaBoard DMBoard2(0, pits2, stores2);
@@ -289,6 +344,7 @@ TEST(MancalaBoardTest, DoubleMoveTest){
 
 TEST(MancalaBoardTest, StealMoveTest){
 
+    /////// NEW BOARD ///////
     int pits[] = {1, 2, 3, 0, 4, 4, 2, 3, 6, 5};
     int stores[] = {5, 5};
     CMancalaBoard SBoard(0, pits, stores);
@@ -312,6 +368,7 @@ TEST(MancalaBoardTest, StealMoveTest){
                                     "             PITS          P2\n");
 
     
+    /////// NEW BOARD ///////
     int pits2[] = {9, 2, 2, 0, 4, 4, 2, 2, 4, 0};
     int stores2[] = {5, 6};
     CMancalaBoard SBoard2(1, pits2, stores2);
@@ -336,9 +393,7 @@ TEST(MancalaBoardTest, StealMoveTest){
                                     "             PITS          P2\n");
 
 
-
-// test if it only works in the players side -> it doesnt work
-
+    /////// NEW BOARD ///////
     int pits3[] = {4, 0, 3, 3, 4, 4, 2, 4, 5, 3};
     int stores3[] = {5, 3};
 
@@ -354,7 +409,6 @@ TEST(MancalaBoardTest, StealMoveTest){
 
     EXPECT_FALSE(SBoard3.GameOver());
 
-    std::cout << std::string(SBoard3) << std::endl;
     EXPECT_EQ(std::string(SBoard3),
                                     "P1          PITS\n"
                                     "      5   4   3   2   1\n"
@@ -370,6 +424,7 @@ TEST(MancalaBoardTest, StealMoveTest){
 
 TEST(MancalaBoardTest, CantMoveTest){
     
+    /////// NEW BOARD ///////
     int pits[] = {0, 0, 0, 0, 1, 0, 2, 1, 2, 1};
     int stores[] = {18, 15};
 
@@ -388,7 +443,7 @@ TEST(MancalaBoardTest, CantMoveTest){
     CantMoveBoard.Move(0,4);
     EXPECT_EQ(CantMoveBoard.PlayerScore(0), 19);
     EXPECT_EQ(CantMoveBoard.PitStoneCount(0, 4), 0);
-    EXPECT_EQ(CantMoveBoard.PlayerTurn(), 1);   // I dont know if it should be 1 or 0.
+    EXPECT_EQ(CantMoveBoard.PlayerTurn(), 1);   
     EXPECT_FALSE(CantMoveBoard.GameOver()); 
     EXPECT_EQ(std::string(CantMoveBoard),
                                     "P1          PITS\n"
@@ -447,5 +502,12 @@ TEST(MancalaBoardTest, BadParametersTest)
 
     EXPECT_EQ(Board.PitStoneCount(3, 6), -1);  //invalid parameter for player and pit
     EXPECT_EQ(Board.PitStoneCount(67, -4), -1);  //invalid parameter for player and pit
+
+    int pits[] = {4, 0, 2, 1, 3, 4, 2, 1, 3, 1};
+    int stores[] = {10, 8};
+
+    CMancalaBoard BadParameterBoard(0, pits, stores);
+    EXPECT_FALSE(BadParameterBoard.Move(0, 1), false); //picking a pit with no stones
+    EXPECT_EQ(BadParameterBoard.PlayerTurn(), 0);
     
 }
