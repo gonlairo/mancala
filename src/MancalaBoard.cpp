@@ -4,34 +4,6 @@
 
 CMancalaBoard EmptyBoard;
 
-// helper functions -> delete later
-void check_stones_pits(int player);
-
-void print_game(int pits[MANCALA_TOTAL_PITS], int stores[MANCALA_PLAYERS], int stones)
-{
-    std::string pits_str_player0;
-    std::string pits_str_player1;
-    std::string stores_str;
-    for (int i = 0; i < MANCALA_TOTAL_PITS/2; i++)
-    {
-        pits_str_player0 += " " + std::to_string(pits[4 - i]) + " ";
-    }
-    for (int i = MANCALA_TOTAL_PITS/2; i < MANCALA_TOTAL_PITS ; i++)
-    {
-        pits_str_player1 += " " + std::to_string(pits[i]) + " ";
-    }
-    for (int j = 0; j < MANCALA_PLAYERS; j++)
-    {
-        stores_str += " " + std::to_string(stores[j]) + " ";
-    }
-    std::cout << "                -----------------                 " <<std::endl;
-    std::cout << "number of stones:       " << stones << std::endl;
-    std::cout << "pits player 0:  " << "[" << pits_str_player0 << "]" << std::endl;
-    std::cout << "pits player 1:  " << "[" << pits_str_player1 << "]" << std::endl;
-    std::cout << "stores:         " << "    [" << stores_str << "]" << std::endl;
-    std::cout << "                -----------------                 " << std::endl;
-}
-
 CMancalaBoard::CMancalaBoard(){
     DTurn = 0;
     for(int Index = 0; Index < MANCALA_TOTAL_PITS; Index++)
@@ -100,7 +72,7 @@ int CMancalaBoard::PlayerTurn() const{
 int CMancalaBoard::PlayerScore(int player) const{
     if (player > 1 || player < 0)
     {
-        std::cout << "Incorrect input: player should be either 0 or 1" << std::endl;
+        std::cout << "Incorrect input: player should be either 0 or 1." << std::endl;
         return -1;
     }
     
@@ -111,8 +83,8 @@ int CMancalaBoard::PitStoneCount(int player, int pit){
 
     if (player > 1 || player < 0 || pit > 4|| pit < 0)
     {
-        std::cout << "Incorrect input" << std::endl;
-        return -1;
+        std::cout << "Incorrect input: (0 <= player <=1)  AND  (0 <= pit <= 4)" << std::endl;
+            return -1;
     }
     
     return DPits[player * MANCALA_PIT_SLOTS + pit]; 
@@ -182,9 +154,9 @@ CMancalaBoard::operator std::string() const{
 
 bool CMancalaBoard::Move(int player, int pit)
 {
-    int PitIndex = player * MANCALA_PIT_SLOTS + pit;    // pit we are in: number 0, ... ,9
-    int last_pit_p0 = (MANCALA_TOTAL_PITS/2) - 1;
-    int last_pit_p1 =  MANCALA_TOTAL_PITS - 1;
+    int PitIndex = player * MANCALA_PIT_SLOTS + pit;  
+    int last_pit_p0 = (MANCALA_TOTAL_PITS/2) - 1; // PitIndex = 4
+    int last_pit_p1 =  MANCALA_TOTAL_PITS - 1; // PitIndex = 9
     
     if((PitIndex < 0) or (PitIndex > MANCALA_TOTAL_PITS))   // pit out of bounds: return false
     {
@@ -200,7 +172,6 @@ bool CMancalaBoard::Move(int player, int pit)
 
     if (Stones < 1)
     {
-        //std::cout << "No stones: pick another pit" << std::endl;
         return false;
     }
 
@@ -209,7 +180,7 @@ bool CMancalaBoard::Move(int player, int pit)
 
     while(Stones > 1) 
     {
-        if (((PitIndex + 1) % MANCALA_PIT_SLOTS) == 0) // PitIndex == 4 || PitIndex == 9
+        if (PitIndex == last_pit_p0 || PitIndex == last_pit_p1)
         {
             if ((PitIndex == last_pit_p0 && player == 0) or (PitIndex == last_pit_p1 && player == 1))
             {
@@ -232,7 +203,7 @@ bool CMancalaBoard::Move(int player, int pit)
             PitIndex++;
         }
 
-        if(Stones)  // if stones num ≠ 0. imagine pit with only 1 stone and is at 4th position.
+        if(Stones)  // if stones num ≠ 0.
         {
             DPits[PitIndex]++;
             Stones--;
@@ -248,7 +219,7 @@ bool CMancalaBoard::Move(int player, int pit)
 
     // WHAT DO WE DO WITH THE STONE LEFT?
 
-    if (((PitIndex + 1) % MANCALA_PIT_SLOTS) == 0) // PitIndex == 4 || PitIndex == 9
+    if (PitIndex == last_pit_p0 || PitIndex == last_pit_p1)
     {
         if ((PitIndex == last_pit_p0 && player == 0) or (PitIndex == last_pit_p1 && player == 1))
         {
